@@ -1,103 +1,607 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7d1018">
 <title>Un traguardo da festeggiare</title>
+
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden}
-body{font-family:Georgia,serif;background:#f7efe3}
-#stage{position:relative;width:100%;height:100dvh;overflow:hidden;display:grid;place-items:center;background:#f7efe3}
-#scene{position:absolute;inset:0;background:url('busta.png') center/100% 100% no-repeat}
-#party{position:absolute;inset:0;z-index:10;pointer-events:none;overflow:hidden;animation:fade 1s 4.4s forwards}
-#title{position:absolute;top:35%;width:100%;padding:0 15px;text-align:center;color:#7d1018;font-size:clamp(28px,7vw,44px);font-style:italic;font-weight:bold;text-shadow:0 1px 8px #fff5dc;animation:titleIn .7s forwards}
-#subtitle{position:absolute;top:44%;width:100%;text-align:center;color:#9b762f;font-size:12px;letter-spacing:3px;animation:titleIn .7s .3s both}
-.confetti{position:absolute;left:50%;top:42%;width:var(--w);height:var(--h);background:var(--c);border-radius:2px;box-shadow:0 0 7px var(--c);opacity:0;animation:burst var(--t) cubic-bezier(.1,.7,.2,1) var(--delay) forwards}
-.spark{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);background:#e4bd61;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 8px #e8c15c);opacity:0;animation:twinkle 1.5s var(--delay) forwards}
-.ring{position:absolute;left:var(--x);top:var(--y);width:20px;height:20px;border:4px solid var(--c);border-radius:50%;transform:translate(-50%,-50%) scale(.1);animation:ring 1.5s var(--delay) ease-out forwards;opacity:0}
-@keyframes burst{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.2)}10%{opacity:1}65%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.2)}}
-@keyframes twinkle{0%{opacity:0;transform:scale(.1) rotate(0)}20%{opacity:1;transform:scale(2)}70%{opacity:1}100%{opacity:0;transform:scale(.1) rotate(100deg)}}
-@keyframes ring{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}10%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(18)}}
-@keyframes titleIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fade{to{opacity:0;visibility:hidden}}
-#envelope{position:relative;width:min(94vw,500px);height:min(72vh,680px);background:url('busta.png') center/100% 100% no-repeat;opacity:0;animation:appear .8s 4.6s forwards}
-@keyframes appear{to{opacity:1}}
-#flap{position:absolute;inset:0;background:url('busta.png') center/100% 100% no-repeat;clip-path:polygon(4% 31%,96% 31%,50% 50%);transform-origin:50% 31%;transition:transform 1s ease;z-index:3;pointer-events:none}
-#seal{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:27%;aspect-ratio:1;border-radius:50%;border:3px solid #d1a34f;background:radial-gradient(circle at 30% 25%,#b82b35,#7d1018 65%,#4a060b);color:#f5d889;font-size:clamp(36px,10vw,58px);box-shadow:inset 0 0 12px #ef9c6b,0 4px 10px #400;z-index:5;cursor:pointer}
-#seal:after{content:"⌂"}
-#card{position:absolute;z-index:2;width:72%;height:auto;left:14%;top:20%;opacity:0;transform:translateY(35%);transition:transform 1.8s ease,opacity .8s ease}
-#hint{position:absolute;z-index:6;bottom:-10%;width:100%;text-align:center;color:#7d1018;font-size:clamp(12px,3vw,16px);letter-spacing:1px}
-#full{position:absolute;inset:0;background:#f7efe3;display:grid;place-items:center;opacity:0;visibility:hidden;z-index:20;transition:opacity 1s}
-#full img{width:100%;height:100%;object-fit:contain}
-#envelope.open #flap{transform:rotateX(180deg)}
-#envelope.open #seal{animation:breakSeal .55s forwards;pointer-events:none}
-@keyframes breakSeal{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}40%{transform:translate(-50%,-50%) scale(1.15) rotate(12deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(-40deg)}}
-#envelope.open #card{opacity:1;transform:translateY(-8%)}
-#envelope.open #hint{opacity:0}
-#full.show{opacity:1;visibility:visible}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+:root {
+  --wine: #7d1018;
+  --paper: #f7efe3;
+  --gold: #c99b48;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  background: var(--paper);
+  font-family: Georgia, serif;
+}
+
+body { overflow: hidden; }
+
+.stage {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--paper);
+  isolation: isolate;
+}
+
+/* INTRODUZIONE FESTOSA */
+
+.intro-burst {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(
+    circle at 50% 48%,
+    #fffdf6 0,
+    #f7efe3 54%,
+    #e4c9ad 100%
+  );
+  pointer-events: none;
+  animation: introFade 1s ease 4.25s forwards;
+}
+
+.intro-title {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 41%;
+  text-align: center;
+  color: var(--wine);
+  font-size: clamp(27px, 7.5vw, 45px);
+  line-height: 1.12;
+  font-style: italic;
+  font-weight: bold;
+  opacity: 0;
+  transform: translateY(12px) scale(.65) rotate(-4deg);
+  text-shadow: 0 2px 0 #fff8e9, 0 0 22px #d9b25b66;
+  animation: titleFirework .95s cubic-bezier(.16,1.3,.3,1) .28s forwards;
+}
+
+.intro-subtitle {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 53%;
+  text-align: center;
+  color: #9c7434;
+  font-size: clamp(11px, 3vw, 16px);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: subtitlePop .65s ease .78s forwards;
+}
+
+.confetti {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  background: var(--c);
+  border-radius: 2px;
+  opacity: 0;
+  transform: translate(0,0) rotate(0deg);
+  animation: confettiBurst var(--dur) cubic-bezier(.12,.62,.25,1) var(--delay) forwards;
+}
+
+.spark {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  background: #d5aa55;
+  clip-path: polygon(
+    50% 0, 61% 38%, 100% 50%, 61% 62%,
+    50% 100%, 39% 62%, 0 50%, 39% 38%
+  );
+  opacity: 0;
+  filter: drop-shadow(0 0 9px #e7c66b);
+  animation: sparkPop 1.6s cubic-bezier(.16,.8,.25,1) var(--delay) forwards;
+}
+
+.burst-ring {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 48px;
+  height: 48px;
+  border: 6px solid #c99b48;
+  border-radius: 50%;
+  transform: translate(-50%,-50%) scale(.1);
+  opacity: 0;
+  box-shadow: 0 0 28px #e7c66bcc, 0 0 60px #e7c66b55;
+  animation: ringBlast 1.8s cubic-bezier(.1,.6,.2,1) var(--delay) forwards;
+}
+
+.burst-ring.r2 {
+  border-color: #7d1018;
+  animation-delay: .16s;
+}
+
+.burst-ring.r3 {
+  border-color: #b8cbd7;
+  animation-delay: .32s;
+}
+
+/* BUSTA */
+
+.cover {
+  position: relative;
+  width: min(100vw, 648px);
+  height: 100svh;
+  max-height: 1199px;
+  aspect-ratio: 648 / 1199;
+  background: url('busta.png') center / 100% 100% no-repeat;
+  transform-origin: center;
+  transition: transform .8s ease, opacity .65s ease;
+  overflow: hidden;
+  opacity: 0;
+  animation: envelopeArrive .85s cubic-bezier(.18,.75,.2,1) 4.45s forwards;
+}
+
+/* PATTA */
+
+.flap {
+  position: absolute;
+  inset: 0;
+  background: url('busta.png') center / 100% 100% no-repeat;
+  clip-path: polygon(4% 31.25%, 95.5% 31.25%, 49.5% 49.4%);
+  transform-origin: 50% 31.25%;
+  transition: transform 1.15s cubic-bezier(.2,.75,.2,1);
+  z-index: 3;
+  pointer-events: none;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.flap:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,.02),
+    rgba(35,0,0,.14)
+  );
+  clip-path: polygon(4% 31.25%, 95.5% 31.25%, 49.5% 49.4%);
+}
+
+/* SIGILLO */
+
+.seal-hit {
+  position: absolute;
+  left: 50%;
+  top: 52.1%;
+  width: 28%;
+  aspect-ratio: 1;
+  transform: translate(-50%,-50%);
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  z-index: 5;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.seal-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 25%,
+    #b42a2b 0,
+    #8e1018 43%,
+    #610810 100%
+  );
+  border: 3px solid #a52b2a;
+  box-shadow:
+    inset 0 2px 5px #e65b4c88,
+    inset 0 -5px 8px #35000688,
+    0 3px 8px #38000055;
+  transition: opacity .35s, transform .45s;
+}
+
+.seal-face:before {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border: 1.5px solid #d8ad5e;
+  border-radius: 50%;
+  opacity: .95;
+}
+
+.seal-face:after {
+  content: "⌂";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 12%;
+  text-align: center;
+  color: #f1d38a;
+  font-family: Georgia, serif;
+  font-size: clamp(30px, 9vw, 55px);
+  line-height: 1.2;
+}
+
+.crack {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 52%;
+  background: #f8df9b;
+  transform: translate(-50%,-50%) rotate(24deg);
+  opacity: 0;
+}
+
+.crack.c2 {
+  transform: translate(-50%,-50%) rotate(-38deg);
+  height: 38%;
+  left: 57%;
+  top: 46%;
+}
+
+.crack.c3 {
+  transform: translate(-50%,-50%) rotate(75deg);
+  height: 30%;
+  left: 44%;
+  top: 57%;
+}
+
+.seal-hit:focus-visible {
+  outline: 3px solid #f5d58e;
+  outline-offset: 6px;
+}
+
+.hint {
+  position: absolute;
+  z-index: 4;
+  left: 8%;
+  right: 8%;
+  top: 70%;
+  text-align: center;
+  color: var(--wine);
+  font-size: clamp(13px, 3.5vw, 19px);
+  letter-spacing: .06em;
+}
+
+/* LETTERA CHE ESCE */
+
+.card-emerge {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 53%;
+  width: 42%;
+  height: auto;
+  max-height: 47%;
+  object-fit: contain;
+  opacity: 0;
+  transform: translate(-50%,24%) scale(.42);
+  transform-origin: center;
+  box-shadow: 0 12px 28px #35140c44;
+  transition:
+    transform 1.35s cubic-bezier(.16,.72,.2,1),
+    opacity .55s ease;
+  pointer-events: none;
+}
+
+/* INVITO A SCHERMO INTERO */
+
+.invite-full {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  background: var(--paper);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(.94);
+  transition:
+    opacity .65s ease,
+    transform .8s cubic-bezier(.2,.75,.2,1),
+    visibility 0s linear .8s;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.invite-full img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100svh;
+  object-fit: contain;
+  box-shadow: 0 8px 30px #6d3a2a22;
+}
+
+/* SEQUENZA DI APERTURA */
+
+.stage.cracking .seal-face {
+  animation: sealBreak .55s ease forwards;
+}
+
+.stage.cracking .crack {
+  animation: crackFlash .45s ease forwards;
+}
+
+.stage.flap-open .flap {
+  transform: perspective(900px) rotateX(178deg);
+  filter: brightness(.78);
+}
+
+.stage.card-out .card-emerge {
+  opacity: 1;
+  transform: translate(-50%,-38%) scale(1);
+}
+
+.stage.card-out .seal-hit {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+
+.stage.opened .cover {
+  opacity: 0;
+  transform: scale(.96);
+  pointer-events: none;
+}
+
+.stage.opened .invite-full {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition-delay: 0s;
+}
+
+.stage.opened .card-emerge {
+  opacity: 0;
+}
+
+/* ANIMAZIONI */
+
+@keyframes introFade {
+  to { opacity: 0; visibility: hidden; }
+}
+
+@keyframes titleFirework {
+  0% {
+    opacity: 0;
+    transform: translateY(25px) scale(.55) rotate(-5deg);
+  }
+  48% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.12) rotate(2deg);
+  }
+  68% { transform: translateY(2px) scale(.97) rotate(-1deg); }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+
+@keyframes ringBlast {
+  0% { opacity: 0; transform: translate(-50%,-50%) scale(.1); }
+  8% { opacity: 1; }
+  38% { opacity: .95; }
+  100% {
+    opacity: 0;
+    transform: translate(-50%,-50%) scale(48);
+  }
+}
+
+@keyframes subtitlePop {
+  to { opacity: 1; }
+}
+
+@keyframes envelopeArrive {
+  0% { opacity: 0; transform: translateY(22px) scale(.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes confettiBurst {
+  0% {
+    opacity: 0;
+    transform: translate(0,0) rotate(0deg) scale(.15);
+  }
+  7% { opacity: 1; }
+  68% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.8);
+  }
+}
+
+@keyframes sparkPop {
+  0% { opacity: 0; transform: scale(.05) rotate(0); }
+  12% { opacity: 1; transform: scale(2.5) rotate(25deg); }
+  42% { opacity: 1; transform: scale(2) rotate(40deg); }
+  100% { opacity: 0; transform: scale(.05) rotate(95deg); }
+}
+
+@keyframes sealBreak {
+  0% { transform: scale(1) rotate(0); opacity: 1; }
+  35% { transform: scale(1.06) rotate(-5deg); }
+  100% { transform: scale(.15) rotate(22deg); opacity: 0; }
+}
+
+@keyframes crackFlash {
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (min-width:649px) {
+  .cover {
+    width: auto;
+    height: min(100svh,1199px);
+    aspect-ratio: 648 / 1199;
+  }
+
+  .card-emerge {
+    width: min(42%,280px);
+    max-height: 47%;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  *, *:before, *:after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
 </style>
 </head>
+
 <body>
-<main id="stage">
-  <div id="scene"></div>
-  <div id="party">
-    <div id="title">È tempo di festeggiare!</div>
-    <div id="subtitle">UNA GIOIA DA CONDIVIDERE</div>
+<main class="stage" id="stage">
+
+  <div class="intro-burst" aria-hidden="true">
+    <i class="burst-ring"></i>
+    <i class="burst-ring r2"></i>
+    <i class="burst-ring r3"></i>
+
+    <i class="burst-ring" style="left:18%;top:25%;border-color:#c99b48;animation-delay:.42s"></i>
+    <i class="burst-ring r2" style="left:82%;top:30%;animation-delay:.58s"></i>
+    <i class="burst-ring r3" style="left:23%;top:72%;animation-delay:.72s"></i>
+    <i class="burst-ring" style="left:78%;top:70%;animation-delay:.85s"></i>
+
+    <div class="intro-title">È tempo di festeggiare!</div>
+    <div class="intro-subtitle">Una gioia da condividere</div>
+
+    <i class="confetti" style="--x:50%;--y:48%;--w:7px;--h:15px;--c:#7d1018;--dx:-39vw;--dy:-28vh;--rot:410deg;--dur:1.55s;--delay:.05s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:6px;--h:12px;--c:#c99b48;--dx:37vw;--dy:-30vh;--rot:-330deg;--dur:1.6s;--delay:.08s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:8px;--h:13px;--c:#b8cbd7;--dx:-42vw;--dy:20vh;--rot:290deg;--dur:1.65s;--delay:.1s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:5px;--h:14px;--c:#a82b35;--dx:42vw;--dy:23vh;--rot:500deg;--dur:1.5s;--delay:.12s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:7px;--h:10px;--c:#e3c77f;--dx:-25vw;--dy:-37vh;--rot:-400deg;--dur:1.45s;--delay:.15s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:6px;--h:12px;--c:#7d1018;--dx:25vw;--dy:35vh;--rot:380deg;--dur:1.7s;--delay:.06s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:5px;--h:11px;--c:#c99b48;--dx:-18vw;--dy:33vh;--rot:-300deg;--dur:1.5s;--delay:.18s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:7px;--h:13px;--c:#b8cbd7;--dx:18vw;--dy:-38vh;--rot:460deg;--dur:1.65s;--delay:.04s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:6px;--h:10px;--c:#d4a94e;--dx:-46vw;--dy:-5vh;--rot:330deg;--dur:1.5s;--delay:.16s"></i>
+    <i class="confetti" style="--x:50%;--y:48%;--w:6px;--h:14px;--c:#8e1018;--dx:45vw;--dy:2vh;--rot:-370deg;--dur:1.55s;--delay:.09s"></i>
+
+    <i class="spark" style="--x:18%;--y:28%;--size:24px;--delay:.15s"></i>
+    <i class="spark" style="--x:78%;--y:27%;--size:20px;--delay:.3s"></i>
+    <i class="spark" style="--x:23%;--y:68%;--size:18px;--delay:.4s"></i>
+    <i class="spark" style="--x:82%;--y:66%;--size:25px;--delay:.22s"></i>
+    <i class="spark" style="--x:50%;--y:20%;--size:18px;--delay:.48s"></i>
   </div>
-  <section id="envelope">
-    <div id="flap"></div>
-    <button id="seal" aria-label="Rompi il sigillo"></button>
-    <img id="card" src="invito.png" alt="Invito">
-    <div id="hint">TOCCA IL SIGILLO PER APRIRE L'INVITO</div>
+
+  <section class="cover" aria-label="Busta bordeaux dell'invito">
+    <div class="flap" aria-hidden="true"></div>
+
+    <button class="seal-hit" id="seal" aria-label="Rompi il sigillo e apri l'invito">
+      <span class="seal-face" aria-hidden="true"></span>
+      <span class="crack" aria-hidden="true"></span>
+      <span class="crack c2" aria-hidden="true"></span>
+      <span class="crack c3" aria-hidden="true"></span>
+    </button>
+
+    <img class="card-emerge" src="invito.png" alt="Invito che esce dalla busta">
+
+    <div class="hint" id="hint">
+      TOCCA IL SIGILLO<br>PER APRIRE L’INVITO
+    </div>
   </section>
-  <section id="full"><img src="invito.png" alt="Invito completo"></section>
+
+  <section class="invite-full" id="fullInvite" aria-label="Invito completo">
+    <img src="invito.png" alt="Un traguardo da festeggiare">
+  </section>
+
 </main>
+
 <script>
-const party=document.getElementById('party');
-const colors=['#7d1018','#a82b35','#c99b48','#e8c978','#b8cbd7','#fff4d8','#d7a0a2','#f1d9a4'];
+(() => {
+  const stage = document.getElementById('stage');
+  const seal = document.getElementById('seal');
+  const intro = document.querySelector('.intro-burst');
+  const hint = document.getElementById('hint');
 
-for(let i=0;i<65;i++){
-  const el=document.createElement('i');
-  if(i%7===0){
-    el.className='spark';
-    el.style.setProperty('--x',Math.random()*100+'%');
-    el.style.setProperty('--y',Math.random()*100+'%');
-    el.style.setProperty('--s',(18+Math.random()*28)+'px');
-    el.style.setProperty('--delay',(Math.random()*.7)+'s');
-  }else{
-    el.className='confetti';
-    const a=Math.random()*Math.PI*2;
-    const d=20+Math.random()*75;
-    el.style.setProperty('--w',(9+Math.random()*13)+'px');
-    el.style.setProperty('--h',(14+Math.random()*20)+'px');
-    el.style.setProperty('--c',colors[i%colors.length]);
-    el.style.setProperty('--dx',(Math.cos(a)*d)+'vw');
-    el.style.setProperty('--dy',(Math.sin(a)*d)+'vh');
-    el.style.setProperty('--rot',(Math.random()*1200-600)+'deg');
-    el.style.setProperty('--t',(2+Math.random()*1.2)+'s');
-    el.style.setProperty('--delay',(Math.random()*.7)+'s');
+  const partyColors = [
+    '#7d1018', '#a82b35', '#c99b48', '#e3c77f',
+    '#b8cbd7', '#fff4d8', '#d7a0a2', '#f1d9a4'
+  ];
+
+  // 65 elementi per l'esplosione iniziale.
+  for (let i = 0; i < 65; i++) {
+    const bit = document.createElement('i');
+    bit.className = i % 5 === 0 ? 'spark' : 'confetti';
+
+    const angle = (Math.PI * 2 * i / 65) +
+      (Math.random() - .5) * .9;
+    const distance = 38 + Math.random() * 112;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance * .9;
+    const delay = (Math.random() * .7).toFixed(2) + 's';
+
+    if (bit.classList.contains('confetti')) {
+      bit.style.cssText =
+        `--x:50%;--y:48%;` +
+        `--w:${5 + Math.random()*7}px;` +
+        `--h:${9 + Math.random()*12}px;` +
+        `--c:${partyColors[i % partyColors.length]};` +
+        `--dx:${dx}vw;--dy:${dy}vh;` +
+        `--rot:${Math.round(Math.random()*1440-720)}deg;` +
+        `--dur:${2.4 + Math.random()*1.5}s;` +
+        `--delay:${delay}`;
+    } else {
+      bit.style.cssText =
+        `--x:${12 + Math.random()*76}%;` +
+        `--y:${15 + Math.random()*70}%;` +
+        `--size:${14 + Math.random()*18}px;` +
+        `--delay:${delay}`;
+    }
+
+    intro.appendChild(bit);
   }
-  party.appendChild(el);
-}
 
-for(let i=0;i<3;i++){
-  const r=document.createElement('i');
-  r.className='ring';
-  r.style.setProperty('--x',(20+i*30)+'%');
-  r.style.setProperty('--y',(25+(i%2)*18)+'%');
-  r.style.setProperty('--c',i===1?'#d7ad56':'#8f1821');
-  r.style.setProperty('--delay',(i*.25)+'s');
-  party.appendChild(r);
-}
+  let started = false;
 
-const envelope=document.getElementById('envelope');
-document.getElementById('seal').addEventListener('click',()=>{
-  envelope.classList.add('open');
-  setTimeout(()=>document.getElementById('full').classList.add('show'),2400);
-});
+  function openInvite() {
+    if (started) return;
+    started = true;
+
+    stage.classList.add('cracking');
+    hint.style.opacity = '0';
+
+    window.setTimeout(() => {
+      stage.classList.add('flap-open');
+    }, 480);
+
+    window.setTimeout(() => {
+      stage.classList.add('card-out');
+    }, 1350);
+
+    window.setTimeout(() => {
+      stage.classList.add('opened');
+      document.body.style.overflow = 'auto';
+      document.getElementById('fullInvite').scrollTop = 0;
+    }, 3300);
+  }
+
+  seal.addEventListener('click', openInvite);
+})();
 </script>
 </body>
 </html>
