@@ -1,424 +1,260 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#7d1018">
+<meta name="theme-color" content="#f7efe3">
 <title>Un traguardo da festeggiare</title>
 
 <style>
-:root {
-  --wine: #7d1018;
-  --paper: #f7efe3;
-  --gold: #c99b48;
+* {
+  box-sizing: border-box;
 }
-
-* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
   width: 100%;
-  min-height: 100%;
-  background: var(--paper);
+  height: 100%;
+  background: #f7efe3;
   font-family: Georgia, serif;
 }
 
-body { overflow: hidden; }
+body {
+  overflow: hidden;
+}
 
 .stage {
   position: relative;
-  min-height: 100svh;
-  display: grid;
-  place-items: center;
+  width: 100%;
+  height: 100svh;
   overflow: hidden;
-  background: var(--paper);
-  isolation: isolate;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7efe3;
 }
 
-/* INTRODUZIONE FESTOSA */
+/* BUSTA ORIGINALE */
+
+.envelope {
+  position: relative;
+  width: min(100vw, 648px);
+  height: auto;
+  max-height: 100svh;
+  aspect-ratio: 709 / 1412;
+  flex-shrink: 0;
+  opacity: 0;
+  animation: appear 1s ease 4.2s forwards;
+  transition: opacity .65s ease, transform .65s ease;
+}
+
+.envelope-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* AREA CLICCABILE SUL SIGILLO ORIGINALE */
+
+.seal-button {
+  position: absolute;
+  left: 50%;
+  top: 52.2%;
+  width: 29%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 3;
+}
+
+.seal-button:focus-visible {
+  outline: 3px solid #c99b48;
+  outline-offset: 4px;
+}
+
+/* ESPLOSIONE INIZIALE */
 
 .intro {
   position: absolute;
   inset: 0;
-  z-index: 8;
+  z-index: 5;
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(
-    circle at 50% 48%,
-    #fffdf6,
-    #f7efe3 56%,
-    #e4c9ad
-  );
   pointer-events: none;
-  animation: introFade .8s ease 4.2s forwards;
+  background: radial-gradient(
+    circle,
+    #fffdf6 0%,
+    #f7efe3 58%,
+    #e8d2b5 100%
+  );
+  animation: introOut .8s ease 4.2s forwards;
 }
 
 .intro-title {
   position: absolute;
-  top: 42%;
+  top: 43%;
   left: 5%;
   right: 5%;
   text-align: center;
-  color: var(--wine);
-  font-size: clamp(28px, 7.5vw, 46px);
-  font-weight: bold;
+  color: #7d1018;
+  font-size: clamp(27px, 7vw, 45px);
   font-style: italic;
-  text-shadow: 0 2px #fff8e9, 0 0 24px #d9b25b88;
+  font-weight: bold;
+  text-shadow: 0 2px #fff8e9, 0 0 18px #e8c46b;
   opacity: 0;
-  animation: titlePop .9s cubic-bezier(.16,1.3,.3,1) .25s forwards;
+  animation: titleIn .9s ease .25s forwards;
 }
 
-.intro-sub {
+.intro-subtitle {
   position: absolute;
   top: 53%;
-  left: 8%;
-  right: 8%;
+  left: 5%;
+  right: 5%;
   text-align: center;
-  color: #9c7434;
+  color: #987137;
   font-size: clamp(11px, 3vw, 16px);
-  letter-spacing: .2em;
+  letter-spacing: .18em;
   text-transform: uppercase;
   opacity: 0;
-  animation: fadeIn .7s ease .8s forwards;
+  animation: subtitleIn .7s ease .8s forwards;
 }
 
 .confetti {
   position: absolute;
-  left: var(--x);
-  top: var(--y);
+  left: 50%;
+  top: 48%;
   width: var(--w);
   height: var(--h);
-  background: var(--c);
+  background: var(--color);
   border-radius: 2px;
   opacity: 0;
-  animation: confettiBurst var(--dur) cubic-bezier(.12,.62,.25,1) var(--delay) forwards;
-}
-
-.spark {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: var(--size);
-  height: var(--size);
-  background: var(--c, #d5aa55);
-  clip-path: polygon(
-    50% 0, 61% 38%, 100% 50%, 61% 62%,
-    50% 100%, 39% 62%, 0 50%, 39% 38%
-  );
-  opacity: 0;
-  filter: drop-shadow(0 0 8px #e7c66b);
-  animation: sparkPop 1.8s ease var(--delay) forwards;
+  animation: confettiFly var(--duration) ease-out var(--delay) forwards;
 }
 
 .firework {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: transparent;
-  box-shadow: 0 0 0 0 var(--c);
-  animation: firework 1.5s ease-out var(--delay) forwards;
-}
-
-/* BUSTA */
-
-.cover {
-  position: relative;
-  width: min(100vw, 648px);
-  height: 100svh;
-  max-height: 1199px;
-  aspect-ratio: 648 / 1199;
-  background: url('busta.png') center / 100% 100% no-repeat;
-  overflow: hidden;
+  background: var(--color);
   opacity: 0;
-  animation: envelopeArrive .8s ease 4.35s forwards;
-  transition: opacity .5s, transform .6s;
+  box-shadow: 0 0 8px var(--color);
+  animation: fireworks 1.4s ease-out var(--delay) forwards;
 }
 
-/* PATTA */
+/* INVITO GRANDE */
 
-.flap {
-  position: absolute;
-  inset: 0;
-  background: url('busta.png') center / 100% 100% no-repeat;
-  clip-path: polygon(
-    4% 31.25%,
-    95.5% 31.25%,
-    49.5% 49.4%
-  );
-  transform-origin: 50% 31.25%;
-  transition: transform 1s cubic-bezier(.2,.75,.2,1);
-  z-index: 3;
-  pointer-events: none;
-  backface-visibility: hidden;
-}
-
-/* SIGILLO */
-
-.seal-hit {
-  position: absolute;
-  left: 50%;
-  top: 52.1%;
-  width: 28%;
-  aspect-ratio: 1;
-  transform: translate(-50%,-50%);
-  border: 0;
-  border-radius: 50%;
-  padding: 0;
-  background: transparent;
-  cursor: pointer;
-  z-index: 5;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.seal-face {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 25%,
-    #b42a2b,
-    #8e1018 43%,
-    #610810
-  );
-  border: 3px solid #a52b2a;
-  box-shadow:
-    inset 0 2px 5px #e65b4c88,
-    inset 0 -5px 8px #35000688,
-    0 3px 8px #38000055;
-}
-
-.seal-face:before {
-  content: "";
-  position: absolute;
-  inset: 9%;
-  border: 1.5px solid #d8ad5e;
-  border-radius: 50%;
-}
-
-.seal-face:after {
-  content: "⌂";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 12%;
-  text-align: center;
-  color: #f1d38a;
-  font-size: clamp(30px, 9vw, 55px);
-  line-height: 1.2;
-}
-
-.crack {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  top: 50%;
-  width: 2px;
-  height: 52%;
-  background: #f8df9b;
-  transform: translate(-50%,-50%) rotate(24deg);
-  opacity: 0;
-}
-
-.crack.c2 {
-  transform: translate(-50%,-50%) rotate(-38deg);
-  height: 38%;
-  left: 57%;
-  top: 46%;
-}
-
-.crack.c3 {
-  transform: translate(-50%,-50%) rotate(75deg);
-  height: 30%;
-  left: 44%;
-  top: 57%;
-}
-
-.hint {
-  position: absolute;
-  z-index: 4;
-  left: 8%;
-  right: 8%;
-  top: 70%;
-  text-align: center;
-  color: var(--wine);
-  font-size: clamp(13px, 3.5vw, 19px);
-  letter-spacing: .06em;
-}
-
-/* INVITO: PASSAGGIO DIRETTO ALLA GRANDEZZA FINALE */
-
-.invite-full {
+.invite {
   position: fixed;
   inset: 0;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
-  background: var(--paper);
+  background: #f7efe3;
   opacity: 0;
   visibility: hidden;
-  transform: scale(.48);
+  transform: scale(.65);
   transition:
-    opacity .8s ease,
-    transform 1.2s cubic-bezier(.16,.8,.2,1),
-    visibility 0s linear 1.2s;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+    opacity .75s ease,
+    transform 1.05s cubic-bezier(.16,.8,.2,1),
+    visibility 0s linear 1.05s;
 }
 
-.invite-full img {
+.invite img {
   display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100svh;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  box-shadow: 0 8px 30px #6d3a2a22;
 }
 
-/* SEQUENZA */
+/* APERTURA */
 
-.stage.cracking .seal-face {
-  animation: sealBreak .55s ease forwards;
-}
-
-.stage.cracking .crack {
-  animation: crackFlash .45s ease forwards;
-}
-
-.stage.flap-open .flap {
-  transform: perspective(900px) rotateX(178deg);
-  filter: brightness(.78);
-}
-
-.stage.opened .cover {
+.stage.opening .envelope {
   opacity: 0;
-  transform: scale(.96);
+  transform: scale(1.04);
   pointer-events: none;
 }
 
-.stage.opened .invite-full {
+.stage.opening .invite {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
   transition-delay: 0s;
 }
 
-.stage.opened .seal-hit {
-  opacity: 0;
-  pointer-events: none;
-}
-
 /* ANIMAZIONI */
 
-@keyframes introFade {
-  to { opacity: 0; visibility: hidden; }
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-@keyframes titlePop {
-  0% {
-    opacity: 0;
-    transform: translateY(25px) scale(.55) rotate(-5deg);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-5px) scale(1.12) rotate(2deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1) rotate(0);
-  }
-}
-
-@keyframes firework {
-  0% {
-    opacity: 0;
-    box-shadow: 0 0 0 0 var(--c);
-  }
-  12% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 var(--c);
-  }
-  100% {
-    opacity: 0;
-    box-shadow:
-      0 -54px 0 -1px var(--c),
-      38px -38px 0 -1px var(--c),
-      54px 0 0 -1px var(--c),
-      38px 38px 0 -1px var(--c),
-      0 54px 0 -1px var(--c),
-      -38px 38px 0 -1px var(--c),
-      -54px 0 0 -1px var(--c),
-      -38px -38px 0 -1px var(--c),
-      0 -36px 0 -1px #fff0b2,
-      25px -25px 0 -1px #fff0b2,
-      36px 0 0 -1px #fff0b2,
-      25px 25px 0 -1px #fff0b2,
-      0 36px 0 -1px #fff0b2,
-      -25px 25px 0 -1px #fff0b2,
-      -36px 0 0 -1px #fff0b2,
-      -25px -25px 0 -1px #fff0b2;
-  }
-}
-
-@keyframes confettiBurst {
-  0% {
-    opacity: 0;
-    transform: translate(0,0) rotate(0) scale(.2);
-  }
-  8% { opacity: 1; }
-  70% { opacity: 1; }
-  100% {
-    opacity: 0;
-    transform: translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.4);
-  }
-}
-
-@keyframes sparkPop {
-  0% { opacity: 0; transform: scale(.05) rotate(0); }
-  15% { opacity: 1; transform: scale(2.5) rotate(25deg); }
-  45% { opacity: 1; transform: scale(1.8) rotate(45deg); }
-  100% { opacity: 0; transform: scale(.05) rotate(95deg); }
-}
-
-@keyframes envelopeArrive {
-  from { opacity: 0; transform: translateY(20px) scale(.94); }
+@keyframes appear {
+  from { opacity: 0; transform: translateY(18px) scale(.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@keyframes sealBreak {
-  0% { transform: scale(1); opacity: 1; }
-  35% { transform: scale(1.06) rotate(-5deg); }
-  100% { transform: scale(.1) rotate(22deg); opacity: 0; }
+@keyframes introOut {
+  to { opacity: 0; visibility: hidden; }
 }
 
-@keyframes crackFlash {
-  0% { opacity: 0; }
-  25% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes titleIn {
+  0% { opacity: 0; transform: translateY(20px) scale(.65); }
+  55% { opacity: 1; transform: translateY(-4px) scale(1.1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@media (min-width: 649px) {
-  .cover {
-    width: auto;
-    height: min(100svh,1199px);
-    aspect-ratio: 648 / 1199;
+@keyframes subtitleIn {
+  to { opacity: 1; }
+}
+
+@keyframes confettiFly {
+  0% {
+    opacity: 0;
+    transform: translate(0,0) rotate(0) scale(.3);
+  }
+  10% { opacity: 1; }
+  65% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx),var(--dy))
+      rotate(var(--rotation)) scale(1.4);
+  }
+}
+
+@keyframes fireworks {
+  0% {
+    opacity: 0;
+    box-shadow: 0 0 0 0 var(--color);
+  }
+  15% { opacity: 1; }
+  100% {
+    opacity: 0;
+    box-shadow:
+      0 -48px 0 -1px var(--color),
+      34px -34px 0 -1px var(--color),
+      48px 0 0 -1px var(--color),
+      34px 34px 0 -1px var(--color),
+      0 48px 0 -1px var(--color),
+      -34px 34px 0 -1px var(--color),
+      -48px 0 0 -1px var(--color),
+      -34px -34px 0 -1px var(--color),
+      0 -25px 0 0 #fff1bb,
+      18px -18px 0 0 #fff1bb,
+      25px 0 0 0 #fff1bb,
+      18px 18px 0 0 #fff1bb,
+      0 25px 0 0 #fff1bb,
+      -18px 18px 0 0 #fff1bb,
+      -25px 0 0 0 #fff1bb,
+      -18px -18px 0 0 #fff1bb;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *:before, *:after {
+  *, *::before, *::after {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
   }
@@ -429,35 +265,30 @@ body { overflow: hidden; }
 <body>
 <main class="stage" id="stage">
 
-  <div class="intro" id="intro" aria-hidden="true">
-    <i class="firework" style="--x:22%;--y:25%;--c:#c99b48;--delay:.1s"></i>
-    <i class="firework" style="--x:78%;--y:29%;--c:#7d1018;--delay:.35s"></i>
-    <i class="firework" style="--x:76%;--y:69%;--c:#b8cbd7;--delay:.55s"></i>
-    <i class="firework" style="--x:23%;--y:70%;--c:#c99b48;--delay:.75s"></i>
-    <i class="firework" style="--x:50%;--y:18%;--c:#7d1018;--delay:.95s"></i>
-    <i class="firework" style="--x:50%;--y:78%;--c:#b8cbd7;--delay:1.15s"></i>
-
+  <div class="intro" id="intro">
     <div class="intro-title">È tempo di festeggiare!</div>
-    <div class="intro-sub">Una gioia da condividere</div>
+    <div class="intro-subtitle">Una gioia da condividere</div>
   </div>
 
-  <section class="cover" aria-label="Busta bordeaux dell'invito">
-    <div class="flap" aria-hidden="true"></div>
+  <section class="envelope" aria-label="Busta dell'invito">
+    <img
+      class="envelope-image"
+      src="busta.png"
+      alt="Busta bordeaux con sigillo della casetta"
+    >
 
-    <button class="seal-hit" id="seal" aria-label="Rompi il sigillo e apri l'invito">
-      <span class="seal-face" aria-hidden="true"></span>
-      <span class="crack" aria-hidden="true"></span>
-      <span class="crack c2" aria-hidden="true"></span>
-      <span class="crack c3" aria-hidden="true"></span>
-    </button>
-
-    <div class="hint" id="hint">
-      TOCCA IL SIGILLO<br>PER APRIRE L’INVITO
-    </div>
+    <button
+      class="seal-button"
+      id="seal"
+      aria-label="Tocca il sigillo per aprire l'invito"
+    ></button>
   </section>
 
-  <section class="invite-full" id="fullInvite" aria-label="Invito completo">
-    <img src="invito.png" alt="Invito da festeggiare">
+  <section class="invite" id="invite" aria-label="Invito completo">
+    <img
+      src="invito.png"
+      alt="Invito con data, ora e indirizzo della festa"
+    >
   </section>
 
 </main>
@@ -467,66 +298,71 @@ body { overflow: hidden; }
   const stage = document.getElementById('stage');
   const intro = document.getElementById('intro');
   const seal = document.getElementById('seal');
-  const hint = document.getElementById('hint');
 
   const colors = [
-    '#7d1018', '#a82b35', '#c99b48', '#e3c77f',
-    '#b8cbd7', '#fff4d8', '#d7a0a2', '#f1d9a4'
+    '#7d1018',
+    '#a82b35',
+    '#c99b48',
+    '#e3c77f',
+    '#b8cbd7',
+    '#fff4d8',
+    '#d7a0a2',
+    '#f1d9a4'
   ];
 
-  // 180 coriandoli e scintille per un ingresso più ricco.
+  // 180 coriandoli
   for (let i = 0; i < 180; i++) {
-    const el = document.createElement('i');
-    const isSpark = i % 9 === 0;
-    el.className = isSpark ? 'spark' : 'confetti';
+    const piece = document.createElement('i');
+    piece.className = 'confetti';
 
-    const angle = 2 * Math.PI * i / 180 + (Math.random() - .5) * .8;
-    const distance = 35 + Math.random() * 115;
-    const delay = (Math.random() * .85).toFixed(2) + 's';
+    const angle = (Math.PI * 2 * i / 180)
+      + (Math.random() - .5) * .6;
 
-    if (isSpark) {
-      el.style.cssText =
-        `--x:${8 + Math.random() * 84}%;` +
-        `--y:${8 + Math.random() * 82}%;` +
-        `--size:${12 + Math.random() * 20}px;` +
-        `--c:${colors[i % colors.length]};` +
-        `--delay:${delay}`;
-    } else {
-      el.style.cssText =
-        `--x:50%;--y:48%;` +
-        `--w:${4 + Math.random() * 7}px;` +
-        `--h:${8 + Math.random() * 13}px;` +
-        `--c:${colors[i % colors.length]};` +
-        `--dx:${Math.cos(angle) * distance}vw;` +
-        `--dy:${Math.sin(angle) * distance}vh;` +
-        `--rot:${Math.round(Math.random() * 1440 - 720)}deg;` +
-        `--dur:${2.5 + Math.random() * 1.7}s;` +
-        `--delay:${delay}`;
-    }
+    const distance = 30 + Math.random() * 110;
 
-    intro.appendChild(el);
+    piece.style.setProperty('--w', (4 + Math.random() * 6) + 'px');
+    piece.style.setProperty('--h', (8 + Math.random() * 12) + 'px');
+    piece.style.setProperty('--color', colors[i % colors.length]);
+    piece.style.setProperty('--dx', (Math.cos(angle) * distance) + 'vw');
+    piece.style.setProperty('--dy', (Math.sin(angle) * distance) + 'vh');
+    piece.style.setProperty('--rotation', (Math.random() * 1200 - 600) + 'deg');
+    piece.style.setProperty('--duration', (2.5 + Math.random() * 1.5) + 's');
+    piece.style.setProperty('--delay', (Math.random() * .8) + 's');
+
+    intro.appendChild(piece);
   }
 
-  let started = false;
+  // 6 fuochi d'artificio
+  const fireworks = [
+    [18, 24, '#c99b48', .15],
+    [80, 25, '#7d1018', .35],
+    [22, 70, '#b8cbd7', .55],
+    [80, 68, '#c99b48', .75],
+    [50, 17, '#7d1018', .95],
+    [51, 78, '#b8cbd7', 1.15]
+  ];
+
+  fireworks.forEach(([x, y, color, delay]) => {
+    const firework = document.createElement('i');
+    firework.className = 'firework';
+    firework.style.setProperty('--x', x + '%');
+    firework.style.setProperty('--y', y + '%');
+    firework.style.setProperty('--color', color);
+    firework.style.setProperty('--delay', delay + 's');
+    intro.appendChild(firework);
+  });
+
+  let opened = false;
 
   seal.addEventListener('click', () => {
-    if (started) return;
-    started = true;
+    if (opened) return;
+    opened = true;
 
-    stage.classList.add('cracking');
-    hint.style.opacity = '0';
+    stage.classList.add('opening');
 
-    // Il sigillo si rompe, poi si apre la patta.
-    setTimeout(() => {
-      stage.classList.add('flap-open');
-    }, 450);
-
-    // L'invito compare direttamente grande a schermo.
-    setTimeout(() => {
-      stage.classList.add('opened');
-      document.body.style.overflow = 'auto';
-      document.getElementById('fullInvite').scrollTop = 0;
-    }, 1450);
+    window.setTimeout(() => {
+      document.getElementById('invite').scrollTop = 0;
+    }, 1100);
   });
 })();
 </script>
