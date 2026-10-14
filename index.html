@@ -38,51 +38,50 @@ body { overflow: hidden; }
 
 /* INTRODUZIONE FESTOSA */
 
-.intro-burst {
+.intro {
   position: absolute;
   inset: 0;
   z-index: 8;
+  overflow: hidden;
   display: grid;
   place-items: center;
   background: radial-gradient(
     circle at 50% 48%,
-    #fffdf6 0,
-    #f7efe3 54%,
-    #e4c9ad 100%
+    #fffdf6,
+    #f7efe3 56%,
+    #e4c9ad
   );
   pointer-events: none;
-  animation: introFade 1s ease 4.25s forwards;
+  animation: introFade .8s ease 4.2s forwards;
 }
 
 .intro-title {
   position: absolute;
-  left: 6%;
-  right: 6%;
-  top: 41%;
+  top: 42%;
+  left: 5%;
+  right: 5%;
   text-align: center;
   color: var(--wine);
-  font-size: clamp(27px, 7.5vw, 45px);
-  line-height: 1.12;
-  font-style: italic;
+  font-size: clamp(28px, 7.5vw, 46px);
   font-weight: bold;
+  font-style: italic;
+  text-shadow: 0 2px #fff8e9, 0 0 24px #d9b25b88;
   opacity: 0;
-  transform: translateY(12px) scale(.65) rotate(-4deg);
-  text-shadow: 0 2px 0 #fff8e9, 0 0 22px #d9b25b66;
-  animation: titleFirework .95s cubic-bezier(.16,1.3,.3,1) .28s forwards;
+  animation: titlePop .9s cubic-bezier(.16,1.3,.3,1) .25s forwards;
 }
 
-.intro-subtitle {
+.intro-sub {
   position: absolute;
-  left: 10%;
-  right: 10%;
   top: 53%;
+  left: 8%;
+  right: 8%;
   text-align: center;
   color: #9c7434;
   font-size: clamp(11px, 3vw, 16px);
   letter-spacing: .2em;
   text-transform: uppercase;
   opacity: 0;
-  animation: subtitlePop .65s ease .78s forwards;
+  animation: fadeIn .7s ease .8s forwards;
 }
 
 .confetti {
@@ -94,7 +93,6 @@ body { overflow: hidden; }
   background: var(--c);
   border-radius: 2px;
   opacity: 0;
-  transform: translate(0,0) rotate(0deg);
   animation: confettiBurst var(--dur) cubic-bezier(.12,.62,.25,1) var(--delay) forwards;
 }
 
@@ -104,38 +102,26 @@ body { overflow: hidden; }
   top: var(--y);
   width: var(--size);
   height: var(--size);
-  background: #d5aa55;
+  background: var(--c, #d5aa55);
   clip-path: polygon(
     50% 0, 61% 38%, 100% 50%, 61% 62%,
     50% 100%, 39% 62%, 0 50%, 39% 38%
   );
   opacity: 0;
-  filter: drop-shadow(0 0 9px #e7c66b);
-  animation: sparkPop 1.6s cubic-bezier(.16,.8,.25,1) var(--delay) forwards;
+  filter: drop-shadow(0 0 8px #e7c66b);
+  animation: sparkPop 1.8s ease var(--delay) forwards;
 }
 
-.burst-ring {
+.firework {
   position: absolute;
-  left: 50%;
-  top: 48%;
-  width: 48px;
-  height: 48px;
-  border: 6px solid #c99b48;
+  left: var(--x);
+  top: var(--y);
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  transform: translate(-50%,-50%) scale(.1);
-  opacity: 0;
-  box-shadow: 0 0 28px #e7c66bcc, 0 0 60px #e7c66b55;
-  animation: ringBlast 1.8s cubic-bezier(.1,.6,.2,1) var(--delay) forwards;
-}
-
-.burst-ring.r2 {
-  border-color: #7d1018;
-  animation-delay: .16s;
-}
-
-.burst-ring.r3 {
-  border-color: #b8cbd7;
-  animation-delay: .32s;
+  background: transparent;
+  box-shadow: 0 0 0 0 var(--c);
+  animation: firework 1.5s ease-out var(--delay) forwards;
 }
 
 /* BUSTA */
@@ -147,11 +133,10 @@ body { overflow: hidden; }
   max-height: 1199px;
   aspect-ratio: 648 / 1199;
   background: url('busta.png') center / 100% 100% no-repeat;
-  transform-origin: center;
-  transition: transform .8s ease, opacity .65s ease;
   overflow: hidden;
   opacity: 0;
-  animation: envelopeArrive .85s cubic-bezier(.18,.75,.2,1) 4.45s forwards;
+  animation: envelopeArrive .8s ease 4.35s forwards;
+  transition: opacity .5s, transform .6s;
 }
 
 /* PATTA */
@@ -160,25 +145,16 @@ body { overflow: hidden; }
   position: absolute;
   inset: 0;
   background: url('busta.png') center / 100% 100% no-repeat;
-  clip-path: polygon(4% 31.25%, 95.5% 31.25%, 49.5% 49.4%);
+  clip-path: polygon(
+    4% 31.25%,
+    95.5% 31.25%,
+    49.5% 49.4%
+  );
   transform-origin: 50% 31.25%;
-  transition: transform 1.15s cubic-bezier(.2,.75,.2,1);
+  transition: transform 1s cubic-bezier(.2,.75,.2,1);
   z-index: 3;
   pointer-events: none;
   backface-visibility: hidden;
-  transform-style: preserve-3d;
-}
-
-.flap:after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,.02),
-    rgba(35,0,0,.14)
-  );
-  clip-path: polygon(4% 31.25%, 95.5% 31.25%, 49.5% 49.4%);
 }
 
 /* SIGILLO */
@@ -206,16 +182,15 @@ body { overflow: hidden; }
   border-radius: 50%;
   background: radial-gradient(
     circle at 35% 25%,
-    #b42a2b 0,
+    #b42a2b,
     #8e1018 43%,
-    #610810 100%
+    #610810
   );
   border: 3px solid #a52b2a;
   box-shadow:
     inset 0 2px 5px #e65b4c88,
     inset 0 -5px 8px #35000688,
     0 3px 8px #38000055;
-  transition: opacity .35s, transform .45s;
 }
 
 .seal-face:before {
@@ -224,7 +199,6 @@ body { overflow: hidden; }
   inset: 9%;
   border: 1.5px solid #d8ad5e;
   border-radius: 50%;
-  opacity: .95;
 }
 
 .seal-face:after {
@@ -235,7 +209,6 @@ body { overflow: hidden; }
   top: 12%;
   text-align: center;
   color: #f1d38a;
-  font-family: Georgia, serif;
   font-size: clamp(30px, 9vw, 55px);
   line-height: 1.2;
 }
@@ -266,11 +239,6 @@ body { overflow: hidden; }
   top: 57%;
 }
 
-.seal-hit:focus-visible {
-  outline: 3px solid #f5d58e;
-  outline-offset: 6px;
-}
-
 .hint {
   position: absolute;
   z-index: 4;
@@ -283,28 +251,7 @@ body { overflow: hidden; }
   letter-spacing: .06em;
 }
 
-/* LETTERA CHE ESCE */
-
-.card-emerge {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  top: 53%;
-  width: 42%;
-  height: auto;
-  max-height: 47%;
-  object-fit: contain;
-  opacity: 0;
-  transform: translate(-50%,24%) scale(.42);
-  transform-origin: center;
-  box-shadow: 0 12px 28px #35140c44;
-  transition:
-    transform 1.35s cubic-bezier(.16,.72,.2,1),
-    opacity .55s ease;
-  pointer-events: none;
-}
-
-/* INVITO A SCHERMO INTERO */
+/* INVITO: PASSAGGIO DIRETTO ALLA GRANDEZZA FINALE */
 
 .invite-full {
   position: fixed;
@@ -317,11 +264,11 @@ body { overflow: hidden; }
   background: var(--paper);
   opacity: 0;
   visibility: hidden;
-  transform: scale(.94);
+  transform: scale(.48);
   transition:
-    opacity .65s ease,
-    transform .8s cubic-bezier(.2,.75,.2,1),
-    visibility 0s linear .8s;
+    opacity .8s ease,
+    transform 1.2s cubic-bezier(.16,.8,.2,1),
+    visibility 0s linear 1.2s;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -336,7 +283,7 @@ body { overflow: hidden; }
   box-shadow: 0 8px 30px #6d3a2a22;
 }
 
-/* SEQUENZA DI APERTURA */
+/* SEQUENZA */
 
 .stage.cracking .seal-face {
   animation: sealBreak .55s ease forwards;
@@ -349,17 +296,6 @@ body { overflow: hidden; }
 .stage.flap-open .flap {
   transform: perspective(900px) rotateX(178deg);
   filter: brightness(.78);
-}
-
-.stage.card-out .card-emerge {
-  opacity: 1;
-  transform: translate(-50%,-38%) scale(1);
-}
-
-.stage.card-out .seal-hit {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s;
 }
 
 .stage.opened .cover {
@@ -375,8 +311,9 @@ body { overflow: hidden; }
   transition-delay: 0s;
 }
 
-.stage.opened .card-emerge {
+.stage.opened .seal-hit {
   opacity: 0;
+  pointer-events: none;
 }
 
 /* ANIMAZIONI */
@@ -385,65 +322,85 @@ body { overflow: hidden; }
   to { opacity: 0; visibility: hidden; }
 }
 
-@keyframes titleFirework {
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes titlePop {
   0% {
     opacity: 0;
     transform: translateY(25px) scale(.55) rotate(-5deg);
   }
-  48% {
+  50% {
     opacity: 1;
-    transform: translateY(-6px) scale(1.12) rotate(2deg);
+    transform: translateY(-5px) scale(1.12) rotate(2deg);
   }
-  68% { transform: translateY(2px) scale(.97) rotate(-1deg); }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1) rotate(0);
   }
 }
 
-@keyframes ringBlast {
-  0% { opacity: 0; transform: translate(-50%,-50%) scale(.1); }
-  8% { opacity: 1; }
-  38% { opacity: .95; }
+@keyframes firework {
+  0% {
+    opacity: 0;
+    box-shadow: 0 0 0 0 var(--c);
+  }
+  12% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--c);
+  }
   100% {
     opacity: 0;
-    transform: translate(-50%,-50%) scale(48);
+    box-shadow:
+      0 -54px 0 -1px var(--c),
+      38px -38px 0 -1px var(--c),
+      54px 0 0 -1px var(--c),
+      38px 38px 0 -1px var(--c),
+      0 54px 0 -1px var(--c),
+      -38px 38px 0 -1px var(--c),
+      -54px 0 0 -1px var(--c),
+      -38px -38px 0 -1px var(--c),
+      0 -36px 0 -1px #fff0b2,
+      25px -25px 0 -1px #fff0b2,
+      36px 0 0 -1px #fff0b2,
+      25px 25px 0 -1px #fff0b2,
+      0 36px 0 -1px #fff0b2,
+      -25px 25px 0 -1px #fff0b2,
+      -36px 0 0 -1px #fff0b2,
+      -25px -25px 0 -1px #fff0b2;
   }
-}
-
-@keyframes subtitlePop {
-  to { opacity: 1; }
-}
-
-@keyframes envelopeArrive {
-  0% { opacity: 0; transform: translateY(22px) scale(.94); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes confettiBurst {
   0% {
     opacity: 0;
-    transform: translate(0,0) rotate(0deg) scale(.15);
+    transform: translate(0,0) rotate(0) scale(.2);
   }
-  7% { opacity: 1; }
-  68% { opacity: 1; }
+  8% { opacity: 1; }
+  70% { opacity: 1; }
   100% {
     opacity: 0;
-    transform: translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.8);
+    transform: translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.4);
   }
 }
 
 @keyframes sparkPop {
   0% { opacity: 0; transform: scale(.05) rotate(0); }
-  12% { opacity: 1; transform: scale(2.5) rotate(25deg); }
-  42% { opacity: 1; transform: scale(2) rotate(40deg); }
+  15% { opacity: 1; transform: scale(2.5) rotate(25deg); }
+  45% { opacity: 1; transform: scale(1.8) rotate(45deg); }
   100% { opacity: 0; transform: scale(.05) rotate(95deg); }
 }
 
+@keyframes envelopeArrive {
+  from { opacity: 0; transform: translateY(20px) scale(.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 @keyframes sealBreak {
-  0% { transform: scale(1) rotate(0); opacity: 1; }
+  0% { transform: scale(1); opacity: 1; }
   35% { transform: scale(1.06) rotate(-5deg); }
-  100% { transform: scale(.15) rotate(22deg); opacity: 0; }
+  100% { transform: scale(.1) rotate(22deg); opacity: 0; }
 }
 
 @keyframes crackFlash {
@@ -452,20 +409,15 @@ body { overflow: hidden; }
   100% { opacity: 0; }
 }
 
-@media (min-width:649px) {
+@media (min-width: 649px) {
   .cover {
     width: auto;
     height: min(100svh,1199px);
     aspect-ratio: 648 / 1199;
   }
-
-  .card-emerge {
-    width: min(42%,280px);
-    max-height: 47%;
-  }
 }
 
-@media (prefers-reduced-motion:reduce) {
+@media (prefers-reduced-motion: reduce) {
   *, *:before, *:after {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
@@ -477,35 +429,16 @@ body { overflow: hidden; }
 <body>
 <main class="stage" id="stage">
 
-  <div class="intro-burst" aria-hidden="true">
-    <i class="burst-ring"></i>
-    <i class="burst-ring r2"></i>
-    <i class="burst-ring r3"></i>
-
-    <i class="burst-ring" style="left:18%;top:25%;border-color:#c99b48;animation-delay:.42s"></i>
-    <i class="burst-ring r2" style="left:82%;top:30%;animation-delay:.58s"></i>
-    <i class="burst-ring r3" style="left:23%;top:72%;animation-delay:.72s"></i>
-    <i class="burst-ring" style="left:78%;top:70%;animation-delay:.85s"></i>
+  <div class="intro" id="intro" aria-hidden="true">
+    <i class="firework" style="--x:22%;--y:25%;--c:#c99b48;--delay:.1s"></i>
+    <i class="firework" style="--x:78%;--y:29%;--c:#7d1018;--delay:.35s"></i>
+    <i class="firework" style="--x:76%;--y:69%;--c:#b8cbd7;--delay:.55s"></i>
+    <i class="firework" style="--x:23%;--y:70%;--c:#c99b48;--delay:.75s"></i>
+    <i class="firework" style="--x:50%;--y:18%;--c:#7d1018;--delay:.95s"></i>
+    <i class="firework" style="--x:50%;--y:78%;--c:#b8cbd7;--delay:1.15s"></i>
 
     <div class="intro-title">È tempo di festeggiare!</div>
-    <div class="intro-subtitle">Una gioia da condividere</div>
-
-    <i class="confetti" style="--x:50%;--y:48%;--w:7px;--h:15px;--c:#7d1018;--dx:-39vw;--dy:-28vh;--rot:410deg;--dur:1.55s;--delay:.05s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:6px;--h:12px;--c:#c99b48;--dx:37vw;--dy:-30vh;--rot:-330deg;--dur:1.6s;--delay:.08s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:8px;--h:13px;--c:#b8cbd7;--dx:-42vw;--dy:20vh;--rot:290deg;--dur:1.65s;--delay:.1s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:5px;--h:14px;--c:#a82b35;--dx:42vw;--dy:23vh;--rot:500deg;--dur:1.5s;--delay:.12s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:7px;--h:10px;--c:#e3c77f;--dx:-25vw;--dy:-37vh;--rot:-400deg;--dur:1.45s;--delay:.15s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:6px;--h:12px;--c:#7d1018;--dx:25vw;--dy:35vh;--rot:380deg;--dur:1.7s;--delay:.06s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:5px;--h:11px;--c:#c99b48;--dx:-18vw;--dy:33vh;--rot:-300deg;--dur:1.5s;--delay:.18s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:7px;--h:13px;--c:#b8cbd7;--dx:18vw;--dy:-38vh;--rot:460deg;--dur:1.65s;--delay:.04s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:6px;--h:10px;--c:#d4a94e;--dx:-46vw;--dy:-5vh;--rot:330deg;--dur:1.5s;--delay:.16s"></i>
-    <i class="confetti" style="--x:50%;--y:48%;--w:6px;--h:14px;--c:#8e1018;--dx:45vw;--dy:2vh;--rot:-370deg;--dur:1.55s;--delay:.09s"></i>
-
-    <i class="spark" style="--x:18%;--y:28%;--size:24px;--delay:.15s"></i>
-    <i class="spark" style="--x:78%;--y:27%;--size:20px;--delay:.3s"></i>
-    <i class="spark" style="--x:23%;--y:68%;--size:18px;--delay:.4s"></i>
-    <i class="spark" style="--x:82%;--y:66%;--size:25px;--delay:.22s"></i>
-    <i class="spark" style="--x:50%;--y:20%;--size:18px;--delay:.48s"></i>
+    <div class="intro-sub">Una gioia da condividere</div>
   </div>
 
   <section class="cover" aria-label="Busta bordeaux dell'invito">
@@ -518,15 +451,13 @@ body { overflow: hidden; }
       <span class="crack c3" aria-hidden="true"></span>
     </button>
 
-    <img class="card-emerge" src="invito.png" alt="Invito che esce dalla busta">
-
     <div class="hint" id="hint">
       TOCCA IL SIGILLO<br>PER APRIRE L’INVITO
     </div>
   </section>
 
   <section class="invite-full" id="fullInvite" aria-label="Invito completo">
-    <img src="invito.png" alt="Un traguardo da festeggiare">
+    <img src="invito.png" alt="Invito da festeggiare">
   </section>
 
 </main>
@@ -534,73 +465,69 @@ body { overflow: hidden; }
 <script>
 (() => {
   const stage = document.getElementById('stage');
+  const intro = document.getElementById('intro');
   const seal = document.getElementById('seal');
-  const intro = document.querySelector('.intro-burst');
   const hint = document.getElementById('hint');
 
-  const partyColors = [
+  const colors = [
     '#7d1018', '#a82b35', '#c99b48', '#e3c77f',
     '#b8cbd7', '#fff4d8', '#d7a0a2', '#f1d9a4'
   ];
 
-  // 65 elementi per l'esplosione iniziale.
-  for (let i = 0; i < 65; i++) {
-    const bit = document.createElement('i');
-    bit.className = i % 5 === 0 ? 'spark' : 'confetti';
+  // 180 coriandoli e scintille per un ingresso più ricco.
+  for (let i = 0; i < 180; i++) {
+    const el = document.createElement('i');
+    const isSpark = i % 9 === 0;
+    el.className = isSpark ? 'spark' : 'confetti';
 
-    const angle = (Math.PI * 2 * i / 65) +
-      (Math.random() - .5) * .9;
-    const distance = 38 + Math.random() * 112;
-    const dx = Math.cos(angle) * distance;
-    const dy = Math.sin(angle) * distance * .9;
-    const delay = (Math.random() * .7).toFixed(2) + 's';
+    const angle = 2 * Math.PI * i / 180 + (Math.random() - .5) * .8;
+    const distance = 35 + Math.random() * 115;
+    const delay = (Math.random() * .85).toFixed(2) + 's';
 
-    if (bit.classList.contains('confetti')) {
-      bit.style.cssText =
-        `--x:50%;--y:48%;` +
-        `--w:${5 + Math.random()*7}px;` +
-        `--h:${9 + Math.random()*12}px;` +
-        `--c:${partyColors[i % partyColors.length]};` +
-        `--dx:${dx}vw;--dy:${dy}vh;` +
-        `--rot:${Math.round(Math.random()*1440-720)}deg;` +
-        `--dur:${2.4 + Math.random()*1.5}s;` +
+    if (isSpark) {
+      el.style.cssText =
+        `--x:${8 + Math.random() * 84}%;` +
+        `--y:${8 + Math.random() * 82}%;` +
+        `--size:${12 + Math.random() * 20}px;` +
+        `--c:${colors[i % colors.length]};` +
         `--delay:${delay}`;
     } else {
-      bit.style.cssText =
-        `--x:${12 + Math.random()*76}%;` +
-        `--y:${15 + Math.random()*70}%;` +
-        `--size:${14 + Math.random()*18}px;` +
+      el.style.cssText =
+        `--x:50%;--y:48%;` +
+        `--w:${4 + Math.random() * 7}px;` +
+        `--h:${8 + Math.random() * 13}px;` +
+        `--c:${colors[i % colors.length]};` +
+        `--dx:${Math.cos(angle) * distance}vw;` +
+        `--dy:${Math.sin(angle) * distance}vh;` +
+        `--rot:${Math.round(Math.random() * 1440 - 720)}deg;` +
+        `--dur:${2.5 + Math.random() * 1.7}s;` +
         `--delay:${delay}`;
     }
 
-    intro.appendChild(bit);
+    intro.appendChild(el);
   }
 
   let started = false;
 
-  function openInvite() {
+  seal.addEventListener('click', () => {
     if (started) return;
     started = true;
 
     stage.classList.add('cracking');
     hint.style.opacity = '0';
 
-    window.setTimeout(() => {
+    // Il sigillo si rompe, poi si apre la patta.
+    setTimeout(() => {
       stage.classList.add('flap-open');
-    }, 480);
+    }, 450);
 
-    window.setTimeout(() => {
-      stage.classList.add('card-out');
-    }, 1350);
-
-    window.setTimeout(() => {
+    // L'invito compare direttamente grande a schermo.
+    setTimeout(() => {
       stage.classList.add('opened');
       document.body.style.overflow = 'auto';
       document.getElementById('fullInvite').scrollTop = 0;
-    }, 3300);
-  }
-
-  seal.addEventListener('click', openInvite);
+    }, 1450);
+  });
 })();
 </script>
 </body>
