@@ -1,199 +1,103 @@
 
-
 <!DOCTYPE html>
-
 <html lang="it">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
 <title>Un traguardo da festeggiare</title>
-
 <style>
-
 *{box-sizing:border-box}
-
 html,body{margin:0;width:100%;height:100%;overflow:hidden}
-
 body{font-family:Georgia,serif;background:#f7efe3}
-
 #stage{position:relative;width:100%;height:100dvh;overflow:hidden;display:grid;place-items:center;background:#f7efe3}
-
 #scene{position:absolute;inset:0;background:url('busta.png') center/100% 100% no-repeat}
-
 #party{position:absolute;inset:0;z-index:10;pointer-events:none;overflow:hidden;animation:fade 1s 4.4s forwards}
-
 #title{position:absolute;top:35%;width:100%;padding:0 15px;text-align:center;color:#7d1018;font-size:clamp(28px,7vw,44px);font-style:italic;font-weight:bold;text-shadow:0 1px 8px #fff5dc;animation:titleIn .7s forwards}
-
 #subtitle{position:absolute;top:44%;width:100%;text-align:center;color:#9b762f;font-size:12px;letter-spacing:3px;animation:titleIn .7s .3s both}
-
 .confetti{position:absolute;left:50%;top:42%;width:var(--w);height:var(--h);background:var(--c);border-radius:2px;box-shadow:0 0 7px var(--c);opacity:0;animation:burst var(--t) cubic-bezier(.1,.7,.2,1) var(--delay) forwards}
-
 .spark{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);background:#e4bd61;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 8px #e8c15c);opacity:0;animation:twinkle 1.5s var(--delay) forwards}
-
 .ring{position:absolute;left:var(--x);top:var(--y);width:20px;height:20px;border:4px solid var(--c);border-radius:50%;transform:translate(-50%,-50%) scale(.1);animation:ring 1.5s var(--delay) ease-out forwards;opacity:0}
-
 @keyframes burst{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.2)}10%{opacity:1}65%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.2)}}
-
 @keyframes twinkle{0%{opacity:0;transform:scale(.1) rotate(0)}20%{opacity:1;transform:scale(2)}70%{opacity:1}100%{opacity:0;transform:scale(.1) rotate(100deg)}}
-
 @keyframes ring{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}10%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(18)}}
-
 @keyframes titleIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
 @keyframes fade{to{opacity:0;visibility:hidden}}
-
 #envelope{position:relative;width:min(94vw,500px);height:min(72vh,680px);background:url('busta.png') center/100% 100% no-repeat;opacity:0;animation:appear .8s 4.6s forwards}
-
 @keyframes appear{to{opacity:1}}
-
 #flap{position:absolute;inset:0;background:url('busta.png') center/100% 100% no-repeat;clip-path:polygon(4% 31%,96% 31%,50% 50%);transform-origin:50% 31%;transition:transform 1s ease;z-index:3;pointer-events:none}
-
 #seal{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:27%;aspect-ratio:1;border-radius:50%;border:3px solid #d1a34f;background:radial-gradient(circle at 30% 25%,#b82b35,#7d1018 65%,#4a060b);color:#f5d889;font-size:clamp(36px,10vw,58px);box-shadow:inset 0 0 12px #ef9c6b,0 4px 10px #400;z-index:5;cursor:pointer}
-
 #seal:after{content:"⌂"}
-
 #card{position:absolute;z-index:2;width:72%;height:auto;left:14%;top:20%;opacity:0;transform:translateY(35%);transition:transform 1.8s ease,opacity .8s ease}
-
 #hint{position:absolute;z-index:6;bottom:-10%;width:100%;text-align:center;color:#7d1018;font-size:clamp(12px,3vw,16px);letter-spacing:1px}
-
 #full{position:absolute;inset:0;background:#f7efe3;display:grid;place-items:center;opacity:0;visibility:hidden;z-index:20;transition:opacity 1s}
-
 #full img{width:100%;height:100%;object-fit:contain}
-
 #envelope.open #flap{transform:rotateX(180deg)}
-
 #envelope.open #seal{animation:breakSeal .55s forwards;pointer-events:none}
-
 @keyframes breakSeal{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}40%{transform:translate(-50%,-50%) scale(1.15) rotate(12deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(-40deg)}}
-
 #envelope.open #card{opacity:1;transform:translateY(-8%)}
-
 #envelope.open #hint{opacity:0}
-
 #full.show{opacity:1;visibility:visible}
-
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-
 </style>
-
 </head>
-
 <body>
-
 <main id="stage">
-
   <div id="scene"></div>
-
   <div id="party">
-
     <div id="title">È tempo di festeggiare!</div>
-
     <div id="subtitle">UNA GIOIA DA CONDIVIDERE</div>
-
   </div>
-
   <section id="envelope">
-
     <div id="flap"></div>
-
     <button id="seal" aria-label="Rompi il sigillo"></button>
-
     <img id="card" src="invito.png" alt="Invito">
-
     <div id="hint">TOCCA IL SIGILLO PER APRIRE L'INVITO</div>
-
   </section>
-
   <section id="full"><img src="invito.png" alt="Invito completo"></section>
-
 </main>
-
 <script>
-
 const party=document.getElementById('party');
-
 const colors=['#7d1018','#a82b35','#c99b48','#e8c978','#b8cbd7','#fff4d8','#d7a0a2','#f1d9a4'];
 
 for(let i=0;i<65;i++){
-
   const el=document.createElement('i');
-
   if(i%7===0){
-
     el.className='spark';
-
     el.style.setProperty('--x',Math.random()*100+'%');
-
     el.style.setProperty('--y',Math.random()*100+'%');
-
     el.style.setProperty('--s',(18+Math.random()*28)+'px');
-
     el.style.setProperty('--delay',(Math.random()*.7)+'s');
-
   }else{
-
     el.className='confetti';
-
     const a=Math.random()*Math.PI*2;
-
     const d=20+Math.random()*75;
-
     el.style.setProperty('--w',(9+Math.random()*13)+'px');
-
     el.style.setProperty('--h',(14+Math.random()*20)+'px');
-
     el.style.setProperty('--c',colors[i%colors.length]);
-
     el.style.setProperty('--dx',(Math.cos(a)*d)+'vw');
-
     el.style.setProperty('--dy',(Math.sin(a)*d)+'vh');
-
     el.style.setProperty('--rot',(Math.random()*1200-600)+'deg');
-
     el.style.setProperty('--t',(2+Math.random()*1.2)+'s');
-
     el.style.setProperty('--delay',(Math.random()*.7)+'s');
-
   }
-
   party.appendChild(el);
-
 }
 
 for(let i=0;i<3;i++){
-
   const r=document.createElement('i');
-
   r.className='ring';
-
   r.style.setProperty('--x',(20+i*30)+'%');
-
   r.style.setProperty('--y',(25+(i%2)*18)+'%');
-
   r.style.setProperty('--c',i===1?'#d7ad56':'#8f1821');
-
   r.style.setProperty('--delay',(i*.25)+'s');
-
   party.appendChild(r);
-
 }
 
 const envelope=document.getElementById('envelope');
-
 document.getElementById('seal').addEventListener('click',()=>{
-
   envelope.classList.add('open');
-
   setTimeout(()=>document.getElementById('full').classList.add('show'),2400);
-
 });
-
 </script>
-
 </body>
-
 </html>
