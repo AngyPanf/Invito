@@ -86,12 +86,7 @@ body {
   z-index: 5;
   overflow: hidden;
   pointer-events: none;
-  background: radial-gradient(
-    circle,
-    #fffdf6 0%,
-    #f7efe3 58%,
-    #e8d2b5 100%
-  );
+  background: radial-gradient(ellipse at center, #fffdf6 0%, #f7efe3 45%, #e8d2b5 100%);
   animation: introOut .8s ease 4.2s forwards;
 }
 
@@ -140,13 +135,13 @@ body {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--color);
   opacity: 0;
   box-shadow: 0 0 8px var(--color);
-  animation: fireworks 1.4s ease-out var(--delay) forwards;
+  animation: fireworks 1.8s ease-out var(--delay) forwards;
 }
 
 /* INVITO GRANDE */
@@ -310,36 +305,36 @@ body {
     '#f1d9a4'
   ];
 
-  // 180 coriandoli
-  for (let i = 0; i < 180; i++) {
+  // 420 coriandoli per un'esplosione iniziale più ricca
+  for (let i = 0; i < 420; i++) {
     const piece = document.createElement('i');
     piece.className = 'confetti';
 
-    const angle = (Math.PI * 2 * i / 180)
+    const angle = (Math.PI * 2 * i / 420)
       + (Math.random() - .5) * .6;
 
-    const distance = 30 + Math.random() * 110;
+    const distance = 45 + Math.random() * 155;
 
-    piece.style.setProperty('--w', (4 + Math.random() * 6) + 'px');
-    piece.style.setProperty('--h', (8 + Math.random() * 12) + 'px');
+    piece.style.setProperty('--w', (4 + Math.random() * 8) + 'px');
+    piece.style.setProperty('--h', (7 + Math.random() * 17) + 'px');
     piece.style.setProperty('--color', colors[i % colors.length]);
     piece.style.setProperty('--dx', (Math.cos(angle) * distance) + 'vw');
     piece.style.setProperty('--dy', (Math.sin(angle) * distance) + 'vh');
     piece.style.setProperty('--rotation', (Math.random() * 1200 - 600) + 'deg');
-    piece.style.setProperty('--duration', (2.5 + Math.random() * 1.5) + 's');
-    piece.style.setProperty('--delay', (Math.random() * .8) + 's');
+    piece.style.setProperty('--duration', (2.8 + Math.random() * 2.2) + 's');
+    piece.style.setProperty('--delay', (Math.random() * 1.15) + 's');
 
     intro.appendChild(piece);
   }
 
-  // 6 fuochi d'artificio
+  // 12 fuochi d'artificio distribuiti su tutta la schermata
   const fireworks = [
-    [18, 24, '#c99b48', .15],
-    [80, 25, '#7d1018', .35],
-    [22, 70, '#b8cbd7', .55],
-    [80, 68, '#c99b48', .75],
-    [50, 17, '#7d1018', .95],
-    [51, 78, '#b8cbd7', 1.15]
+    [12, 19, '#c99b48', .05], [82, 17, '#7d1018', .12],
+    [25, 34, '#b8cbd7', .25], [72, 35, '#c99b48', .32],
+    [48, 15, '#7d1018', .42], [91, 48, '#b8cbd7', .5],
+    [8, 53, '#c99b48', .6], [31, 65, '#7d1018', .7],
+    [68, 62, '#b8cbd7', .8], [51, 78, '#c99b48', .9],
+    [17, 82, '#7d1018', 1.0], [86, 80, '#c99b48', 1.1]
   ];
 
   fireworks.forEach(([x, y, color, delay]) => {
